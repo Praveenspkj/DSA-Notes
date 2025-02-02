@@ -1,1 +1,26 @@
+a.(Reordering and shifting problem)-->hints-->This kind of problem uses the pointer to keep track of reuired state and swappings are used.
 
+
+
+1.283. Move Zeroes (Reordering and In-Place Shifting)
+https://github.com/AlgoMaster-io/leetcode-solutions/blob/main/java/move-zeroes.md
+solved-->using in-place modifications.
+syntax to remember
+System.arraycopy(result, 0, nums, 0, n);
+                 (source,start,target,From,lengthReuiredTobeCopied)  
+
+2.169. Majority Element (Voting Algorithm / Frequency Counting)
+https://github.com/AlgoMaster-io/leetcode-solutions/blob/main/java/majority-element.md
+solved-->Boyer-Moore Voting Algorithm or HashMap frequency counting.
+syntax.
+HashMap<Integer, Integer> countMap = new HashMap<>();
+countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+countMap.get(num)
+count += (num == candidate) ? 1 : -1;
+
+3.238. Product of Array Except Self(Prefix and Suffix Product, Space Optimization)
+https://github.com/AlgoMaster-io/leetcode-solutions/blob/main/java/product-of-array-except-self.md
+
+4.122. Best Time to Buy and Sell Stock II(Greedy / Peak Valley Approach)
+https://github.com/AlgoMaster-io/leetcode-solutions/blob/main/java/product-of-array-except-self.md
+the problem reduces to accumulating all positive differences between consecutive days.
