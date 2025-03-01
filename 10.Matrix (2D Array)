@@ -1,1 +1,298 @@
+Bikes 
+
+Description
+
+Objective :
+
+To work with Routing with List, forms ,validation and styles  in React JS.
+
+Scenario :
+
+Black Buck Dealers- offers online booking for Electric Bikes. They have decided to migrate their application to React JS. As part of that application, design a navigation bar for providing Information on bike details and booking a bike .
+
+Created three Components as App,Info,BookABike.
+
+App.js
+
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import BookABike from './Components/BookABike';
+import Info from './Components/Info';
+
+const styles = {
+    h1: {
+        color: '#fff8dc',
+        fontWeight: 'bold',
+        backgroundColor: '#8fbc8f',
+        fontStyle: 'oblique',
+        textAlign: 'center'
+    },
+    h2: {
+        color: '#228b22',
+        fontWeight: 'bold',
+        fontStyle: 'oblique'
+    }
+};
+
+class App extends Component {
+    render() {
+        return (
+            <Router>
+                <div>
+                    <h1 style={styles.h1}>BlackBuck Dealers</h1>
+                    <h2 style={styles.h2}>Online Electric Bike Booking</h2>
+                    <nav>
+                        <ul>
+                            <li>
+                                <Link to="/info">Info</Link>
+                            </li>
+                            <li>
+                                <Link to="/bookabike">BookABike</Link>
+                            </li>
+                        </ul>
+                    </nav>
+                    <Routes>
+                        <Route path="/info" element={<Info />} />
+                        <Route path="/bookabike" element={<BookABike />} />
+                    </Routes>
+                </div>
+            </Router>
+        );
+    }
+}
+
+export default App;
+
+
+Info.js
+
+import React, { Component } from 'react';
+
+const styles = {
+    h1: {
+        color: '#b22222',
+        textAlign: 'center'
+    },
+    h2: {
+        color: '#b22222'
+    },
+    p: {
+        fontSize: 'large',
+        color: '#dc143c'
+    },
+    div: {
+        backgroundColor: '#ffe4c4',
+        borderStyle: 'dotted',
+        color: '#4c684c'
+    }
+};
+
+const data = [
+    { bikename: "Benling Aura", cost: "$500", batteryChargeTime: "3.5 hours", speed: "15 mph" },
+    { bikename: "Okiawa i-Praise", cost: "$1000", batteryChargeTime: "5 hours", speed: "20 mph" },
+    { bikename: "Hero Electric Nyx", cost: "$1500", batteryChargeTime: "7 hours", speed: "25 mph" },
+    { bikename: "Revolt RV", cost: "$1800", batteryChargeTime: "8 hours", speed: "30 mph" }
+];
+
+class Info extends Component {
+    render() {
+        return (
+            <div style={styles.div}>
+                <h1 style={styles.h1}>Its Great to see you in future!!!</h1>
+                <h2 style={styles.h2}>Please find the details below</h2>
+                {data.map(({ bikename, cost, batteryChargeTime, speed }) => (
+                    <dl key={bikename}>
+                        <dt>{bikename}</dt>
+                        <dd>{cost}</dd>
+                        <dd>{batteryChargeTime}</dd>
+                        <dd>{speed}</dd>
+                    </dl>
+                ))}
+                <p style={styles.p}>Check out the latest models in our store and experience the future of electric bikes.</p>
+                <p style={styles.p}>Contact us for more information and booking details.</p>
+            </div>
+        );
+    }
+}
+
+export default Info;
+
+BookABike.js
+
+
+import React, { Component } from 'react';
+
+const styles = {
+    table: {
+        backgroundColor: '#8fbc8f',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: '50px'
+    },
+    h1: {
+        textAlign: 'center',
+        color: '#b22222'
+    },
+    form: {
+        backgroundColor: '#ffe4c4',
+        borderStyle: 'dotted'
+    },
+    submit: {
+        textAlign: 'center',
+        marginTop: 'auto',
+        paddingTop: '75px'
+    },
+    display: {
+        color: '#dc143c',
+        textAlign: 'center'
+    }
+};
+
+class BookABike extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+            email: '',
+            mobile: '',
+            licenseId: '',
+            licenseExpiryDate: '',
+            brand: '',
+            color: '',
+            errorMessage: '',
+            successMessage: ''
+        };
+    }
+
+    handleChange = (e) => {
+        this.setState({ [e.target.id]: e.target.value });
+    };
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const { name, email, mobile, licenseId, licenseExpiryDate, brand, color } = this.state;
+
+        if (!name || !email || !mobile || !licenseId || !licenseExpiryDate || !brand || !color) {
+            this.setState({ errorMessage: 'Please fill all the required fields', successMessage: '' });
+        } else if (licenseId.length < 9 || licenseId.length > 13) {
+            this.setState({ errorMessage: 'Check your License Number and register again', successMessage: '' });
+        } else {
+            const expiryDate = new Date(licenseExpiryDate);
+            const currentDate = new Date();
+
+            if (expiryDate <= currentDate) {
+                this.setState({
+                    errorMessage: `Hai ${name} !!!.Check your License Validity and register again`,
+                    successMessage: ''
+                });
+            } else {
+                currentDate.setDate(currentDate.getDate() + 20);
+                const deliveryDate = currentDate.toDateString();
+
+                this.setState({
+                    errorMessage: '',
+                    successMessage: `Hai ${name}. Your Registration for ${brand} is successful. Tentative Delivery Date will be on ${deliveryDate}`
+                });
+            }
+        }
+    };
+
+    render() {
+        return (
+            <form style={styles.form} onSubmit={this.handleSubmit}>
+                <h1 style={styles.h1}>Bon Voyage!!</h1>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Name:</td>
+                            <td><input type="text" id="name" onChange={this.handleChange} /></td>
+                        </tr>
+                        <tr>
+                            <td>Email Id:</td>
+                            <td><input type="email" id="email" onChange={this.handleChange} /></td>
+                        </tr>
+                        <tr>
+                            <td>Mobile Number:</td>
+                            <td><input type="tel" id="mobile" onChange={this.handleChange} /></td>
+                        </tr>
+                        <tr>
+                            <td>License Id:</td>
+                            <td><input type="text" id="licenseId" onChange={this.handleChange} /></td>
+                        </tr>
+                        <tr>
+                            <td>License Expiry Date:</td>
+                            <td><input type="date" id="licenseExpiryDate" onChange={this.handleChange} /></td>
+                        </tr>
+                        <tr>
+                            <td>Brand selection:</td>
+                            <td>
+                                <select id="brand" onChange={this.handleChange}>
+                                    <option value="Benling">Benling Aura</option>
+                                    <option value="ipraise">Okiawa i-Praise</option>
+                                    <option value="Hero">Hero Electric Nyx</option>
+                                    <option value="Revolt">Revolt RV</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Choose colour:</td>
+                            <td>
+                                <select id="color" onChange={this.handleChange}>
+                                    <option value="Red">Rebel Red</option>
+                                    <option value="Grey">Mist Grey</option>
+                                    <option value="Black">Cosmic Black</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2">
+                                <div id="st" style={styles.submit}>
+                                    <button type="submit" id="submit">Submit</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="display" style={styles.display}>
+                    {this.state.errorMessage && <p>{this.state.errorMessage}</p>}
+                    {this.state.successMessage && <p>{this.state.successMessage}</p>}
+                </div>
+            </form>
+        );
+    }
+}
+
+export default BookABike;
+
+form.css
+
+/* Do not Change the code */
+table {
+    background-color: #8fbc8f;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    text-align: center;
+}
+
+#st {
+    text-align: center;
+    margin-top: auto;
+    padding-top: 75px;
+}
+
+h1 {
+    text-align: center;
+    color: #b22222;
+}
+
+form {
+    background-color: #ffe4c4;
+    border-style: dotted;
+}
+
+#display {
+    color: #dc143c;
+    text-align: center;
+}
 
